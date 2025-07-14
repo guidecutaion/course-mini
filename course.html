@@ -1,0 +1,2027 @@
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+  --primary-color: #4d5aff;
+  --secondary-color: #3c48cc;
+  --accent-color: #6C47DC;
+
+  --light-color: #ffffff;
+  --dark-color: #1a1a1a;
+  --neutral-color: #cbd5e1;
+
+  --success-color: #21c97a;
+  --warning-color: #f0a500;
+  --correct-color: #21c97a;
+  --incorrect-color: #d84343;
+  --completed-color: rgba(110, 120, 160, 0.15);
+
+  --border-radius: 8px;
+  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.06);
+  --transition: all 0.3s ease;
+  --sidebar-width: 280px;
+  --sidebar-collapsed-width: 50px;
+  --overlay-color: rgba(0, 0, 0, 0.3);
+}
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-color: #f5f7fa;
+            color: var(--dark-color);
+            line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Оверлей для мобильного меню */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--overlay-color);
+            z-index: 99;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Левое меню */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: white;
+            box-shadow: var(--box-shadow);
+            padding: 20px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+            transition: var(--transition);
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .sidebar.collapsed {
+            width: var(--sidebar-collapsed-width);
+            overflow: hidden;
+        }
+
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 15px;
+            white-space: normal;
+            overflow: visible;
+            transition: var(--transition);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sidebar.collapsed .sidebar-header {
+            padding: 0 10px 20px;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .sidebar-header h2 {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            transition: var(--transition);
+            margin-right: 10px;
+        }
+
+        .sidebar.collapsed .sidebar-header h2 {
+            font-size: 0;
+            opacity: 0;
+            height: 0;
+            margin: 0;
+        }
+
+        .toggle-sidebar {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: var(--transition);
+            padding: 5px;
+            min-width: 30px;
+            min-height: 30px;
+        }
+
+        .toggle-sidebar:hover {
+            color: var(--secondary-color);
+        }
+
+        .sidebar.collapsed .toggle-sidebar {
+            transform: rotate(180deg);
+        }
+
+        .tab-button {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 12px 20px;
+            border: none;
+            background: none;
+            text-align: left;
+            cursor: pointer;
+            color: var(--dark-color);
+            font-size: 1rem;
+            transition: var(--transition);
+            border-left: 4px solid transparent;
+            white-space: normal;
+            word-wrap: break-word;
+            overflow: hidden;
+        }
+
+        .tab-button.completed {
+            background-color: var(--completed-color);
+        }
+
+        .tab-number {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary-color);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 24px;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+
+        .sidebar.collapsed .tab-button {
+            padding: 12px 5px;
+            justify-content: center;
+        }
+
+        .sidebar.collapsed .tab-button .tab-text {
+            display: none;
+        }
+
+        .sidebar.collapsed .tab-button .tab-number {
+            margin-right: 0;
+        }
+
+        .tab-button:hover {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary-color);
+        }
+
+        .tab-button.active {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary-color);
+            border-left: 4px solid var(--primary-color);
+            font-weight: 600;
+        }
+
+        .sidebar.collapsed .tab-button.active {
+            border-left: none;
+            border-right: 4px solid var(--primary-color);
+        }
+
+        /* Основное содержимое */
+        .main-content {
+        flex: 1;
+        margin-left: var(--sidebar-width);
+        margin-right: 280px; /* ширина toc-container + отступ */
+        padding: 30px;
+        transition: var(--transition);
+        max-width: 900px;
+        position: relative;
+        z-index: 1;
+        }
+
+        .sidebar.collapsed ~ .main-content {
+            margin-left: var(--sidebar-collapsed-width);
+        }
+
+        .content-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+            position: relative;
+            padding-bottom: 80px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        /* Навигационные кнопки */
+        .section-navigation {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding-top: 20px;
+        }
+
+        .nav-btn {
+            padding: 12px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1rem;
+            min-width: 120px;
+            justify-content: center;
+        }
+
+        .nav-btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .nav-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Правое оглавление */
+        .toc-container {
+            width: 250px;
+            background-color: white;
+            box-shadow: var(--box-shadow);
+            padding: 20px;
+            position: fixed;
+            right: 20px;
+            top: 20px;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+            transition: var(--transition);
+            border-radius: var(--border-radius);
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .toc-header {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-item {
+            margin-bottom: 8px;
+        }
+
+        .toc-link {
+            color: var(--dark-color);
+            text-decoration: none;
+            transition: var(--transition);
+            display: block;
+            padding: 8px 0;
+            border-left: 3px solid transparent;
+            padding-left: 10px;
+            line-height: 1.4;
+        }
+
+        .toc-link:hover, .toc-link.active {
+            color: var(--primary-color);
+            border-left: 3px solid var(--primary-color);
+        }
+
+        /* Элементы контента */
+        .section-title {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 2rem;
+            position: relative;
+            padding-bottom: 10px;
+            scroll-margin-top: 20px;
+            line-height: 1.3;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            max-width: 100%;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: var(--accent-color);
+        }
+
+        .card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 20px;
+            margin-bottom: 25px;
+            scroll-margin-top: 20px;
+            width: 100%;
+            box-sizing: border-box;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+        
+        .card-res {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 20px;
+            margin-bottom: 25px;
+            scroll-margin-top: 20px;
+            width: 900px;
+            max-width: 100%;
+            box-sizing: border-box;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--secondary-color);
+            scroll-margin-top: 20px;
+            line-height: 1.3;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            max-width: 100%;
+        }
+
+        /* Аккордеон */
+        .accordion {
+            margin-bottom: 15px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .accordion-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+            -webkit-user-select: none;
+            user-select: none;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .accordion-header:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .accordion-content {
+            padding: 15px;
+            background-color: white;
+            border: 1px solid #eee;
+            border-top: none;
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
+            display: none;
+            width: 100%;
+            box-sizing: border-box;
+            overflow-wrap: break-word;
+        }
+
+        .accordion.active .accordion-content {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* Тест */
+        .quiz-container {
+            max-width: 100%;
+            margin: 0 auto;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .question {
+            margin-bottom: 25px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            font-weight: 500;
+            line-height: 1.4;
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            -webkit-user-select: none;
+            user-select: none;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .option.correct {
+            background-color: rgba(76, 175, 80, 0.1);
+            border-color: var(--correct-color);
+        }
+
+        .option.incorrect {
+            background-color: rgba(244, 67, 54, 0.1);
+            border-color: var(--incorrect-color);
+        }
+
+        .option:hover {
+            background-color: rgba(67, 97, 238, 0.1);
+            border-color: var(--primary-color);
+        }
+
+        .option input {
+            margin-right: 10px;
+            min-width: 18px;
+            min-height: 18px;
+        }
+
+        .quiz-result {
+            text-align: center;
+            padding: 20px;
+            background-color: var(--light-color);
+            border-radius: var(--border-radius);
+            margin-top: 30px;
+            display: none;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .quiz-result.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 14px 25px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1rem;
+            transition: var(--transition);
+            display: block;
+            margin: 20px auto;
+            min-width: 200px;
+            width: 100%;
+            max-width: 300px;
+            box-sizing: border-box;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        /* Кнопка "Наверх" */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: var(--box-shadow);
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            z-index: 99;
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-3px);
+        }
+
+        /* Анимации */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Дополнительные элементы */
+        .highlight {
+            background-color: rgba(72, 149, 239, 0.2);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-weight: 500;
+        }
+
+        .note {
+            background-color: #fff9e6;
+            border-left: 4px solid #ffd43b;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            width: 100%;
+            box-sizing: border-box;
+            overflow-wrap: break-word;
+        }
+
+        .note-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #d4a017;
+        }
+
+        .code-block {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            font-family: 'Courier New', Courier, monospace;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-size: 14px;
+            line-height: 1.4;
+            width: 100%;
+            box-sizing: border-box;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            min-width: 120px;
+            text-align: center;
+            box-sizing: border-box;
+            max-width: 100%;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 15px 0;
+            width: 100%;
+        }
+
+        .tag {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary-color);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .progress-container {
+            width: 100%;
+            background-color: #e9ecef;
+            border-radius: 20px;
+            margin: 20px 0;
+            height: 10px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 20px;
+            background-color: var(--primary-color);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        /* Мобильное меню */
+        .menu-toggle {
+            position: fixed;
+            top: 25px;
+            left: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 101;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+        }
+
+        .menu-toggle:hover {
+            background-color: var(--secondary-color);
+        }
+
+        /* Мобильная навигация */
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 10px 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            z-index: 98;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .mobile-nav-buttons {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+
+        .mobile-nav-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--dark-color);
+            font-size: 0.7rem;
+            padding: 5px 3px;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            flex: 0 0 auto;
+            min-width: 60px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .mobile-nav-btn.completed {
+            background-color: var(--completed-color);
+        }
+
+        .mobile-nav-btn i {
+            font-size: 1.1rem;
+            margin-bottom: 3px;
+            color: var(--primary-color);
+        }
+
+        .mobile-nav-btn.active {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary-color);
+        }
+
+        /* Адаптивность */
+        @media (max-width: 1200px) {
+            .main-content {
+                margin-right: 20px;
+            }
+            
+            .toc-container {
+                right: 10px;
+                width: 220px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 992px) {
+            html, body {
+                height: 100%;
+                width: 100%;
+                overflow-x: hidden;
+            }
+            
+            .sidebar {
+                transform: translateX(-100%);
+                width: 280px;
+                z-index: 102;
+            }
+            
+            .sidebar.open {
+                transform: translateX(0);
+                animation: slideIn 0.3s ease;
+            }
+            
+            .sidebar.collapsed {
+                transform: translateX(-100%);
+                width: 280px;
+            }
+            
+            .sidebar.collapsed.open {
+                transform: translateX(0);
+                width: 280px;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                margin-right: 0;
+                padding: 20px;
+                padding-top: 80px;
+                width: 100%;
+                max-width: 100%;
+                box-sizing: border-box;
+            }
+            
+            .mobile-view .main-content {
+                height: calc(100% - 60px);
+            }
+            
+            .toc-container {
+                display: none !important;
+            }
+            
+            .menu-toggle {
+                display: flex !important;
+            }
+
+            .mobile-nav {
+                display: flex;
+            }
+
+            .section-navigation {
+                display: none;
+            }
+
+            .content-section {
+                padding-bottom: 80px;
+            }
+            
+            .section-title {
+                margin-top: 20px;
+                font-size: 1.8rem;
+                padding: 0 10px;
+            }
+            
+            .card, .card-res {
+                width: 120%;
+                max-width: 800px;
+                padding: 15px;
+            }
+            
+            /* Скрываем кнопку сворачивания в мобильной версии */
+            .sidebar .toggle-sidebar {
+                display: none;
+            }
+            
+            .sidebar-header {
+                justify-content: center;
+                padding: 0 10px 15px;
+            }
+            
+            /* Убираем эффект нажатия на мобильных кнопках */
+            .mobile-nav-btn:active {
+                transform: none;
+            }
+            
+            /* Специфичные стили для первой вкладки */
+            #intro .section-title {
+                font-size: 1.7rem;
+                line-height: 1.2;
+            }
+            
+            #intro .card-title {
+                font-size: 1.3rem;
+            }
+            
+            #intro .accordion-header {
+                padding: 12px 10px;
+                font-size: 0.95rem;
+            }
+            
+            #intro .accordion-content {
+                padding: 12px 10px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 15px;
+                padding-top: 70px;
+            }
+
+            .section-title {
+                font-size: 1.6rem;
+                margin-top: 15px;
+            }
+
+            .card-title {
+                font-size: 1.3rem;
+            }
+
+            .card {
+                padding: 15px;
+            }
+
+            .accordion-header {
+                padding: 12px;
+                font-size: 0.95rem;
+            }
+
+            .accordion-content {
+                padding: 12px;
+                font-size: 0.95rem;
+            }
+
+            .nav-btn {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+                min-width: 110px;
+            }
+
+            .submit-btn {
+                padding: 12px 20px;
+                font-size: 0.95rem;
+                min-width: 180px;
+            }
+
+            .back-to-top {
+                width: 45px;
+                height: 45px;
+                bottom: 80px;
+                right: 20px;
+            }
+
+            .menu-toggle {
+                width: 45px;
+                height: 45px;
+                top: 15px;
+                left: 15px;
+            }
+            .card, .card-res {
+                width: 120%;
+                max-width: 700px;
+                padding: 15px;
+            }
+            
+            /* Специфичные стили для первой вкладки */
+            #intro .section-title {
+                font-size: 1.5rem;
+            }
+            
+            #intro .card-title {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            html {
+                font-size: 15px;
+            }
+            
+            .main-content {
+                padding: 12px;
+                padding-top: 65px;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+                margin-bottom: 15px;
+                margin-top: 10px;
+            }
+
+            .card-title {
+                font-size: 1.2rem;
+                margin-bottom: 12px;
+            }
+
+            .note {
+                padding: 12px;
+            }
+
+            .code-block {
+                padding: 12px;
+                font-size: 13px;
+            }
+
+            .nav-btn {
+                padding: 10px 12px;
+                font-size: 0.85rem;
+                min-width: 100px;
+            }
+
+            .submit-btn {
+                width: 100%;
+            }
+
+            .mobile-nav-btn {
+                font-size: 0.6rem;
+                min-width: 50px;
+            }
+
+            .mobile-nav-btn i {
+                font-size: 1rem;
+            }
+            .card, .card-res {
+                width: 120%;
+                max-width: 500px;
+                padding: 15px;
+            }
+            
+            /* Специфичные стили для первой вкладки */
+            #intro .section-title {
+                font-size: 1.4rem;
+                padding: 0 5px;
+            }
+            
+            #intro .card {
+                padding: 12px 8px;
+            }
+            
+            #intro .card-title {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            html {
+                font-size: 14px;
+            }
+            
+            .section-title {
+                font-size: 1.4rem;
+            }
+
+            .card-title {
+                font-size: 1.1rem;
+            }
+
+            .nav-btn {
+                padding: 8px 10px;
+                font-size: 0.8rem;
+                min-width: 90px;
+            }
+
+            .mobile-nav-btn {
+                font-size: 0.55rem;
+                min-width: 45px;
+            }
+
+            .mobile-nav-btn i {
+                font-size: 0.9rem;
+            }
+            
+            .menu-toggle {
+                top: 15px;
+                left: 10px;
+                width: 40px;
+                height: 40px;
+            }
+            .card, .card-res {
+                width: 120%;
+                max-width: 350px;
+                padding: 15px;
+            }
+            
+            /* Специфичные стили для первой вкладки */
+            #intro .section-title {
+                font-size: 1.3rem;
+            }
+            
+            #intro .card-title {
+                font-size: 1rem;
+            }
+            
+            #intro .accordion-header {
+                padding: 10px 8px;
+                font-size: 0.9rem;
+            }
+            
+            #intro .accordion-content {
+                padding: 10px 8px;
+                font-size: 0.9rem;
+            }
+            /* --- АДАПТИВНОСТЬ --- */
+            @media (max-width: 1300px) {
+  .main-content {
+    margin-right: 240px;
+  }
+
+  .toc-container {
+    width: 220px;
+    right: 10px;
+  }
+}
+
+@media (max-width: 1180px) {
+  .toc-container {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+    transform: translateX(100vw); /* физически уводим */
+  }
+
+  .main-content {
+    margin-right: 0 !important;
+  }
+}
+        }
+    </style>
+</head>
+<body>
+    <!-- Оверлей для мобильного меню -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Кнопка мобильного меню -->
+    <div class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+    </div>
+
+    <!-- Левое меню -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>Основы программирования</h2>
+            <button class="toggle-sidebar" id="toggleSidebar" title="Свернуть/развернуть меню">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+        </div>
+        <button class="tab-button active completed" data-tab="intro">
+            <span class="tab-number">1</span>
+            <span class="tab-text">Введение в программирование</span>
+        </button>
+        <button class="tab-button" data-tab="basics">
+            <span class="tab-number">2</span>
+            <span class="tab-text">Основные концепции</span>
+        </button>
+        <button class="tab-button" data-tab="advanced">
+            <span class="tab-number">3</span>
+            <span class="tab-text">Продвинутые темы</span>
+        </button>
+        <button class="tab-button" data-tab="practice">
+            <span class="tab-number">4</span>
+            <span class="tab-text">Практические задания</span>
+        </button>
+        <button class="tab-button" data-tab="quiz">
+            <span class="tab-number">5</span>
+            <span class="tab-text">Тест для самопроверки</span>
+        </button>
+        <button class="tab-button" data-tab="resources">
+            <span class="tab-number">6</span>
+            <span class="tab-text">Дополнительные ресурсы</span>
+        </button>
+    </aside>
+
+    <!-- Основное содержимое -->
+    <main class="main-content">
+        <!-- Введение -->
+        <section class="content-section active" id="intro">
+            <h1 class="section-title" id="intro-title">Введение в программирование</h1>
+            
+            <div class="card" id="intro-card1">
+                <h2 class="card-title" id="intro-what-is">Что такое программирование?</h2>
+                <p>Программирование — это процесс создания компьютерных программ. Программы представляют собой набор инструкций, которые компьютер выполняет для решения конкретных задач.</p>
+                
+                <div class="note">
+                    <div class="note-title">Интересный факт</div>
+                    <p>Первый в истории программист был женщиной — Ада Лавлейс, которая в середине XIX века написала алгоритм для аналитической машины Чарльза Бэббиджа.</p>
+                </div>
+                
+                <h3>Почему стоит изучать программирование?</h3>
+                <div class="accordion">
+                    <div class="accordion-header">
+                        <span>Развитие логического мышления</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Программирование учит разбивать сложные задачи на более простые, структурировать мысли и находить оптимальные решения. Эти навыки полезны не только в IT, но и в повседневной жизни.</p>
+                    </div>
+                </div>
+                
+                <div class="accordion">
+                    <div class="accordion-header">
+                        <span>Перспективы карьеры</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p>IT-специалисты востребованы на рынке труда и получают высокие зарплаты. Даже базовые знания программирования могут открыть новые карьерные возможности.</p>
+                    </div>
+                </div>
+                
+                <div class="accordion">
+                    <div class="accordion-header">
+                        <span>Создание собственных проектов</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Знание программирования позволяет создавать собственные сайты, приложения, автоматизировать рутинные задачи и реализовывать творческие идеи.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" id="intro-card2">
+                <h2 class="card-title" id="intro-start">С чего начать?</h2>
+                <p>Для начала изучения программирования нужно:</p>
+                <ol>
+                    <li>Выбрать язык программирования (Python, JavaScript, Java и др.)</li>
+                    <li>Установить необходимое программное обеспечение</li>
+                    <li>Найти хорошие учебные материалы</li>
+                    <li>Практиковаться ежедневно</li>
+                </ol>
+                
+                <div class="progress-container">
+                    <div class="progress-bar" style="width: 30%;"></div>
+                </div>
+                <p>Вы завершили 30% вводного модуля</p>
+                
+                <div class="tags">
+                    <span class="tag">новичкам</span>
+                    <span class="tag">основы</span>
+                    <span class="tag">введение</span>
+                </div>
+            </div>
+
+            <div class="section-navigation">
+                <button class="nav-btn" id="intro-prev" disabled>
+                    <i class="fas fa-arrow-left"></i> Назад
+                </button>
+                <button class="nav-btn" id="intro-next">
+                    Далее <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+        
+        <!-- Основные концепции -->
+        <section class="content-section" id="basics">
+            <h1 class="section-title" id="basics-title">Основные концепции программирования</h1>
+            
+            <div class="card" id="basics-card1">
+                <h2 class="card-title" id="basics-variables">Переменные и типы данных</h2>
+                <p>Переменные — это именованные ячейки памяти для хранения данных. В разных языках программирования переменные объявляются по-разному.</p>
+                
+                <div class="code-block">
+                    <pre>// JavaScript
+let name = "Алексей";
+let age = 30;
+let isStudent = true;</pre>
+                </div>
+                
+                <p>Основные типы данных:</p>
+                <ul>
+                    <li><span class="highlight">Числа</span> (целые и дробные)</li>
+                    <li><span class="highlight">Строки</span> (текст)</li>
+                    <li><span class="highlight">Логические</span> (true/false)</li>
+                    <li><span class="highlight">Массивы</span> (наборы значений)</li>
+                    <li><span class="highlight">Объекты</span> (структуры данных)</li>
+                </ul>
+            </div>
+            
+            <div class="card" id="basics-card2">
+                <h2 class="card-title" id="basics-conditions">Условные операторы</h2>
+                <p>Условные операторы позволяют выполнять разные действия в зависимости от условий.</p>
+                
+                <div class="code-block">
+                    <pre>if (age >= 18) {
+    console.log("Вы совершеннолетний");
+} else {
+    console.log("Вы несовершеннолетний");
+}</pre>
+                </div>
+                
+                <div class="note">
+                    <div class="note-title">Совет</div>
+                    <p>Всегда используйте фигурные скобки {} для блоков кода, даже если они содержат всего одну строку. Это делает код более читаемым и предотвращает ошибки.</p>
+                </div>
+            </div>
+
+            <div class="section-navigation">
+                <button class="nav-btn" id="basics-prev">
+                    <i class="fas fa-arrow-left"></i> Назад
+                </button>
+                <button class="nav-btn" id="basics-next">
+                    Далее <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+        
+        <!-- Продвинутые темы -->
+        <section class="content-section" id="advanced">
+            <h1 class="section-title" id="advanced-title">Продвинутые темы</h1>
+            
+            <div class="card" id="advanced-card1">
+                <h2 class="card-title" id="advanced-oop">Объектно-ориентированное программирование (ООП)</h2>
+                <p>ООП — это парадигма программирования, основанная на концепции объектов, которые могут содержать данные и код.</p>
+                
+                <div class="accordion">
+                    <div class="accordion-header">
+                        <span>Основные принципы ООП</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <ul>
+                            <li><strong>Инкапсуляция</strong> — сокрытие внутренней реализации</li>
+                            <li><strong>Наследование</strong> — создание новых классов на основе существующих</li>
+                            <li><strong>Полиморфизм</strong> — возможность объектов с одинаковой спецификацией иметь разную реализацию</li>
+                            <li><strong>Абстракция</strong> — работа с объектами на концептуальном уровне</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="code-block">
+                    <pre>// Пример класса в JavaScript
+class Animal {
+    constructor(name) {
+        this.name = name;
+    }
+    
+    speak() {
+        console.log(`${this.name} издает звук.`);
+    }
+}
+
+class Dog extends Animal {
+    speak() {
+        console.log(`${this.name} лает.`);
+    }
+}
+
+const dog = new Dog('Рекс');
+dog.speak(); // Выведет: "Рекс лает."</pre>
+                </div>
+            </div>
+
+            <div class="section-navigation">
+                <button class="nav-btn" id="advanced-prev">
+                    <i class="fas fa-arrow-left"></i> Назад
+                </button>
+                <button class="nav-btn" id="advanced-next">
+                    Далее <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+        
+        <!-- Практика -->
+        <section class="content-section" id="practice">
+            <h1 class="section-title" id="practice-title">Практические задания</h1>
+            
+            <div class="card" id="practice-card1">
+                <h2 class="card-title" id="practice-calculator">Задание 1: Калькулятор</h2>
+                <p>Создайте простой калькулятор, который может выполнять основные арифметические операции (сложение, вычитание, умножение, деление).</p>
+                
+                <div class="accordion">
+                    <div class="accordion-header">
+                        <span>Подсказка</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Используйте условные операторы для выбора операции и переменные для хранения чисел и результата.</p>
+                    </div>
+                </div>
+                
+                <button class="btn" id="showSolution1">Показать решение</button>
+                
+                <div class="code-block" id="solution1" style="display: none;">
+                    <pre>// Простой калькулятор на JavaScript
+function calculator(a, b, operation) {
+    let result;
+    if (operation === '+') {
+        result = a + b;
+    } else if (operation === '-') {
+        result = a - b;
+    } else if (operation === '*') {
+        result = a * b;
+    } else if (operation === '/') {
+        result = a / b;
+    } else {
+        return 'Неизвестная операция';
+    }
+    return result;
+}
+
+console.log(calculator(5, 3, '+')); // 8
+console.log(calculator(10, 2, '/')); // 5</pre>
+                </div>
+            </div>
+
+            <div class="section-navigation">
+                <button class="nav-btn" id="practice-prev">
+                    <i class="fas fa-arrow-left"></i> Назад
+                </button>
+                <button class="nav-btn" id="practice-next">
+                    Далее <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+        
+        <!-- Тест для самопроверки -->
+        <section class="content-section" id="quiz">
+            <h1 class="section-title" id="quiz-title">Тест для самопроверки</h1>
+            
+            <div class="card quiz-container" id="quiz-card1">
+                <h2 class="card-title" id="quiz-test">Проверьте свои знания</h2>
+                <p>Ответьте на вопросы, чтобы проверить, насколько хорошо вы усвоили материал. Результаты никуда не отправляются.</p>
+                
+                <div class="question">
+                    <div class="question-text">1. Что такое переменная в программировании?</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q1" value="a"> Именованная ячейка памяти для хранения данных
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q1" value="b"> Математическая переменная из алгебры
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q1" value="c"> Тип данных в JavaScript
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <div class="question-text">2. Какие из перечисленных языков являются языками программирования?</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q2" value="a"> HTML и CSS
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q2" value="b"> Python и JavaScript
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q2" value="c"> SQL и XML
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="question">
+                    <div class="question-text">3. Что выведет следующий код: console.log(2 + '2');</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q3" value="a"> 4
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q3" value="b"> "22"
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q3" value="c"> Ошибку
+                        </label>
+                    </div>
+                </div>
+                
+                <button class="submit-btn" id="submitQuiz">Проверить ответы</button>
+                
+                <div class="quiz-result" id="quizResult">
+                    <h3>Результаты теста</h3>
+                    <p id="quizScore"></p>
+                    <p id="quizFeedback"></p>
+                    <button class="btn btn-outline" id="retryQuiz">Пройти тест снова</button>
+                </div>
+            </div>
+
+            <div class="section-navigation">
+                <button class="nav-btn" id="quiz-prev">
+                    <i class="fas fa-arrow-left"></i> Назад
+                </button>
+                <button class="nav-btn" id="quiz-next">
+                    Далее <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+        
+        <!-- Дополнительные ресурсы -->
+        <section class="content-section" id="resources">
+            <h1 class="section-title" id="resources-title">Дополнительные ресурсы</h1>
+            
+            <div class="card-res" id="resources-card1">
+                <h2 class="card-title" id="resources-materials">Полезные материалы для изучения</h2>
+                
+                <div class="accordion">
+                    <div class="accordion-header">
+                        <span>Онлайн-курсы</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <ul>
+                            <li><a href="#" target="_blank">Введение в программирование (Coursera)</a></li>
+                            <li><a href="#" target="_blank">JavaScript для начинающих (Udemy)</a></li>
+                            <li><a href="#" target="_blank">Основы Python (Stepik)</a></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="accordion">
+                    <div class="accordion-header">
+                        <span>Книги</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <ul>
+                            <li>"Совершенный код" — Стив Макконнелл</li>
+                            <li>"Чистый код" — Роберт Мартин</li>
+                            <li>"Вы не знаете JS" — Кайл Симпсон</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="accordion">
+                    <div class="accordion-header">
+                        <span>Практические платформы</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <ul>
+                            <li><a href="#" target="_blank">Codewars</a> — задачи по программированию</li>
+                            <li><a href="#" target="_blank">LeetCode</a> — подготовка к техническим собеседованиям</li>
+                            <li><a href="#" target="_blank">GitHub</a> — хостинг проектов и совместная работа</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-navigation">
+                <button class="nav-btn" id="resources-prev">
+                    <i class="fas fa-arrow-left"></i> Назад
+                </button>
+                <button class="nav-btn" id="resources-next" disabled>
+                    Далее <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Правое оглавление -->
+    <aside class="toc-container" id="tocContainer">
+        <div class="toc-header">Оглавление</div>
+        <ul class="toc-list" id="tocList">
+            <!-- Содержимое генерируется JavaScript -->
+        </ul>
+    </aside>
+
+    <!-- Мобильная навигация -->
+    <nav class="mobile-nav">
+        <div class="mobile-nav-buttons">
+            <a href="#" class="mobile-nav-btn active completed" data-tab="intro">
+                <i class="fas fa-home"></i>
+                <span>Главная</span>
+            </a>
+            <a href="#" class="mobile-nav-btn" data-tab="basics">
+                <i class="fas fa-book"></i>
+                <span>Основы</span>
+            </a>
+            <a href="#" class="mobile-nav-btn" data-tab="advanced">
+                <i class="fas fa-star"></i>
+                <span>Продвинутое</span>
+            </a>
+            <a href="#" class="mobile-nav-btn" data-tab="practice">
+                <i class="fas fa-tasks"></i>
+                <span>Практика</span>
+            </a>
+            <a href="#" class="mobile-nav-btn" data-tab="quiz">
+                <i class="fas fa-question"></i>
+                <span>Тест</span>
+            </a>
+            <a href="#" class="mobile-nav-btn" data-tab="resources">
+                <i class="fas fa-link"></i>
+                <span>Ресурсы</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Кнопка "Наверх" -->
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Проверяем, новый ли это сеанс (если да - очищаем предыдущее состояние)
+            if (!sessionStorage.getItem('isReload')) {
+                localStorage.removeItem('appState');
+                sessionStorage.setItem('isReload', 'true');
+            }
+
+            // Переключение вкладок
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const contentSections = document.querySelectorAll('.content-section');
+            const tabs = ['intro', 'basics', 'advanced', 'practice', 'quiz', 'resources'];
+            const mobileNavButtons = document.querySelectorAll('.mobile-nav-btn');
+            
+            // Функция для сохранения состояния
+            function saveAppState() {
+                const activeTab = document.querySelector('.tab-button.active')?.getAttribute('data-tab');
+                const scrollPosition = window.scrollY;
+                
+                const completedTabs = Array.from(document.querySelectorAll('.tab-button.completed'))
+                    .map(btn => btn.getAttribute('data-tab'));
+                
+                const state = {
+                    tab: activeTab,
+                    scroll: scrollPosition,
+                    completedTabs: completedTabs
+                };
+                
+                localStorage.setItem('appState', JSON.stringify(state));
+            }
+
+            // Функция для восстановления состояния
+            function restoreAppState() {
+                const savedState = localStorage.getItem('appState');
+                if (savedState) {
+                    const { tab, scroll, completedTabs } = JSON.parse(savedState);
+                    
+                    if (completedTabs && completedTabs.length) {
+                        completedTabs.forEach(tabId => {
+                            const tabBtn = document.querySelector(`.tab-button[data-tab="${tabId}"]`);
+                            const mobileBtn = document.querySelector(`.mobile-nav-btn[data-tab="${tabId}"]`);
+                            if (tabBtn) tabBtn.classList.add('completed');
+                            if (mobileBtn) mobileBtn.classList.add('completed');
+                        });
+                    }
+                    
+                    if (tab && document.querySelector(`.tab-button[data-tab="${tab}"]`)) {
+                        switchTab(tab);
+                    }
+                    
+                    setTimeout(() => {
+                        if (scroll) {
+                            window.scrollTo(0, scroll);
+                        }
+                    }, 100);
+                }
+            }
+
+            // Функция для переключения вкладок
+            function switchTab(tabId) {
+    // 1. Временно блокируем скролл
+    document.body.style.overflow = 'hidden';
+    
+    // 2. Удаляем активный класс у всех кнопок и секций
+    tabButtons.forEach(btn => btn.classList.remove('active'));
+    contentSections.forEach(section => {
+        section.classList.remove('active');
+        section.style.display = 'none'; // Добавляем для надежности
+    });
+    mobileNavButtons.forEach(btn => btn.classList.remove('active'));
+    
+    // 3. Добавляем активный класс к выбранной кнопке
+    document.querySelector(`.tab-button[data-tab="${tabId}"]`)?.classList.add('active');
+    
+    // 4. Показываем соответствующую секцию
+    const newSection = document.getElementById(tabId);
+    newSection.classList.add('active');
+    newSection.style.display = 'block'; // Добавляем для надежности
+    
+    // 5. Активируем соответствующую кнопку мобильной навигации
+    document.querySelector(`.mobile-nav-btn[data-tab="${tabId}"]`)?.classList.add('active');
+    
+    // 6. Обновляем оглавление
+    updateTOC();
+    
+    // 7. Жесткий сброс скролла (работает на всех устройствах)
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    newSection.scrollTop = 0;
+    
+    // 8. Восстанавливаем скролл после небольшой задержки
+    setTimeout(() => {
+        document.body.style.overflow = '';
+        newSection.style.display = ''; // Восстанавливаем исходное значение
+    }, 50);
+    
+    // 9. Закрываем меню на мобильных
+    if (window.innerWidth <= 992) {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('active');
+    }
+    
+    // 10. Сохраняем состояние
+    saveAppState();
+}
+
+// Проверяем iOS и применяем специальный хак
+if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+    document.addEventListener('touchmove', function(e) {
+        if (document.body.style.overflow === 'hidden') {
+            e.preventDefault();
+        }
+    }, { passive: false });
+}
+            
+            // Обработчики для кнопок вкладок
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabId = button.getAttribute('data-tab');
+                    switchTab(tabId);
+                    
+                    // Помечаем вкладку как пройденную
+                    button.classList.add('completed');
+                    
+                    // Помечаем соответствующую кнопку мобильной навигации как пройденную
+                    document.querySelector(`.mobile-nav-btn[data-tab="${tabId}"]`)?.classList.add('completed');
+                });
+            });
+            
+            // Обработчики для мобильной навигации (исправляем проблему с #)
+            mobileNavButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const tabId = button.getAttribute('data-tab');
+                    switchTab(tabId);
+                    
+                    document.querySelector(`.tab-button[data-tab="${tabId}"]`)?.classList.add('completed');
+                    button.classList.add('completed');
+                    
+                    // Удаляем хэш из URL
+                    history.replaceState(null, null, ' ');
+                });
+            });
+            
+            // Навигационные кнопки "Далее" и "Назад"
+            tabs.forEach((tab, index) => {
+                const prevBtn = document.getElementById(`${tab}-prev`);
+                const nextBtn = document.getElementById(`${tab}-next`);
+                
+                if (prevBtn) {
+                    prevBtn.addEventListener('click', () => {
+                        if (index > 0) {
+                            switchTab(tabs[index - 1]);
+                        }
+                    });
+                }
+                
+                if (nextBtn) {
+                    nextBtn.addEventListener('click', () => {
+                        if (index < tabs.length - 1) {
+                            switchTab(tabs[index + 1]);
+                        }
+                    });
+                }
+            });
+            
+            // Кнопка сворачивания/разворачивания бокового меню
+            const toggleSidebarBtn = document.getElementById('toggleSidebar');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            
+            toggleSidebarBtn.addEventListener('click', function() {
+                sidebar.classList.toggle('collapsed');
+                
+                // Сохраняем состояние в localStorage
+                const isCollapsed = sidebar.classList.contains('collapsed');
+                localStorage.setItem('sidebarCollapsed', isCollapsed);
+            });
+            
+            // Проверяем сохраненное состояние при загрузке
+            const savedState = localStorage.getItem('sidebarCollapsed');
+            if (savedState === 'true') {
+                sidebar.classList.add('collapsed');
+            }
+            
+            // Мобильное меню
+            const menuToggle = document.getElementById('menuToggle');
+            
+            menuToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('open');
+                overlay.classList.toggle('active');
+            });
+            
+            // Закрытие меню при клике на оверлей
+            overlay.addEventListener('click', function() {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('active');
+            });
+            
+            // Закрытие меню при клике вне его на мобильных
+            document.addEventListener('click', function(e) {
+                if (window.innerWidth <= 992 && 
+                    !sidebar.contains(e.target) && 
+                    !menuToggle.contains(e.target) &&
+                    sidebar.classList.contains('open')) {
+                    sidebar.classList.remove('open');
+                    overlay.classList.remove('active');
+                }
+            });
+            
+            // Автоматическая адаптация под мобильные устройства
+            function handleMobileLayout() {
+                const isMobile = window.innerWidth <= 992;
+                if (isMobile) {
+                    // Устанавливаем 100% высоты для мобильных
+                    document.documentElement.style.height = '100%';
+                    document.body.style.height = '100%';
+                    document.body.style.minHeight = '100vh';
+                    
+                    // Добавляем специальный класс для мобильных
+                    document.body.classList.add('mobile-view');
+                    
+                    // Скрываем кнопку сворачивания в мобильной версии
+                    document.getElementById('toggleSidebar').style.display = 'none';
+                    document.querySelector('.sidebar-header').style.justifyContent = 'center';
+                } else {
+                    document.body.classList.remove('mobile-view');
+                    document.getElementById('toggleSidebar').style.display = 'block';
+                    document.querySelector('.sidebar-header').style.justifyContent = 'space-between';
+                }
+            }
+
+            // Инициализация при загрузке
+            handleMobileLayout();
+            window.addEventListener('resize', handleMobileLayout);
+            
+            // Дополнительная проверка для первой вкладки
+            function checkIntroOverflow() {
+                if (window.innerWidth <= 992) {
+                    const introSection = document.getElementById('intro');
+                    if (introSection) {
+                        const containerWidth = introSection.offsetWidth;
+                        const contentWidth = introSection.scrollWidth;
+                        
+                        if (contentWidth > containerWidth) {
+                            // Принудительно применяем дополнительные стили
+                            introSection.style.overflowX = 'hidden';
+                            introSection.querySelectorAll('*').forEach(el => {
+                                el.style.maxWidth = '100%';
+                                el.style.boxSizing = 'border-box';
+                            });
+                        }
+                    }
+                }
+            }
+            
+            // Проверяем при загрузке и изменении размера
+            window.addEventListener('load', checkIntroOverflow);
+            window.addEventListener('resize', checkIntroOverflow);
+            
+            // Аккордеон
+            const accordionHeaders = document.querySelectorAll('.accordion-header');
+            accordionHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const accordion = header.parentElement;
+                    accordion.classList.toggle('active');
+                    
+                    const icon = header.querySelector('i');
+                    if (accordion.classList.contains('active')) {
+                        icon.classList.remove('fa-chevron-down');
+                        icon.classList.add('fa-chevron-up');
+                    } else {
+                        icon.classList.remove('fa-chevron-up');
+                        icon.classList.add('fa-chevron-down');
+                    }
+                });
+            });
+            
+            // Показать/скрыть решение задачи
+            document.getElementById('showSolution1').addEventListener('click', function() {
+                const solution = document.getElementById('solution1');
+                if (solution.style.display === 'none') {
+                    solution.style.display = 'block';
+                    this.textContent = 'Скрыть решение';
+                } else {
+                    solution.style.display = 'none';
+                    this.textContent = 'Показать решение';
+                }
+            });
+            
+            // Тест для самопроверки
+            const quizForm = document.querySelector('.quiz-container');
+            const submitBtn = document.getElementById('submitQuiz');
+            const quizResult = document.getElementById('quizResult');
+            const quizScore = document.getElementById('quizScore');
+            const quizFeedback = document.getElementById('quizFeedback');
+            const retryBtn = document.getElementById('retryQuiz');
+            
+            const correctAnswers = {
+                q1: 'a',
+                q2: 'b',
+                q3: 'b'
+            };
+            
+            submitBtn.addEventListener('click', function() {
+                let score = 0;
+                const totalQuestions = Object.keys(correctAnswers).length;
+                
+                // Проверяем ответы
+                for (const question in correctAnswers) {
+                    const selectedOption = document.querySelector(`input[name="${question}"]:checked`);
+                    const options = document.querySelectorAll(`input[name="${question}"]`);
+                    
+                    options.forEach(option => {
+                        const optionLabel = option.parentElement;
+                        optionLabel.classList.remove('correct', 'incorrect');
+                        
+                        if (option.value === correctAnswers[question]) {
+                            optionLabel.classList.add('correct');
+                        } else if (option.checked) {
+                            optionLabel.classList.add('incorrect');
+                        }
+                    });
+                    
+                    if (selectedOption && selectedOption.value === correctAnswers[question]) {
+                        score++;
+                    }
+                }
+                
+                // Показываем результаты
+                quizScore.textContent = `Вы ответили правильно на ${score} из ${totalQuestions} вопросов.`;
+                
+                // Добавляем обратную связь
+                const percentage = (score / totalQuestions) * 100;
+                if (percentage >= 80) {
+                    quizFeedback.textContent = 'Отличный результат! Вы хорошо усвоили материал.';
+                } else if (percentage >= 50) {
+                    quizFeedback.textContent = 'Неплохо, но есть над чем поработать. Повторите материал еще раз.';
+                } else {
+                    quizFeedback.textContent = 'Рекомендуем изучить материал еще раз перед продолжением.';
+                }
+                
+                quizResult.classList.add('show');
+                window.scrollTo({
+                    top: quizResult.offsetTop - 20,
+                    behavior: 'smooth'
+                });
+                
+                // Сохраняем состояние
+                saveAppState();
+            });
+            
+            retryBtn.addEventListener('click', function() {
+                // Сбрасываем тест
+                document.querySelectorAll('input[type="radio"]').forEach(input => {
+                    input.checked = false;
+                    input.parentElement.classList.remove('correct', 'incorrect');
+                });
+                quizResult.classList.remove('show');
+            });
+            
+            // Генерация оглавления
+            function updateTOC() {
+                const tocList = document.getElementById('tocList');
+                tocList.innerHTML = '';
+                
+                const activeSection = document.querySelector('.content-section.active');
+                if (!activeSection) return;
+                
+                // Добавляем основной заголовок секции
+                const mainTitle = activeSection.querySelector('.section-title');
+                if (mainTitle) {
+                    const mainItem = document.createElement('li');
+                    mainItem.className = 'toc-item';
+                    
+                    const mainLink = document.createElement('a');
+                    mainLink.className = 'toc-link';
+                    mainLink.textContent = mainTitle.textContent;
+                    mainLink.href = `#${mainTitle.id}`;
+                    
+                    mainItem.appendChild(mainLink);
+                    tocList.appendChild(mainItem);
+                }
+                
+                // Добавляем карточки и их заголовки
+                const cards = activeSection.querySelectorAll('.card, .card-res');
+                cards.forEach(card => {
+                    const cardTitle = card.querySelector('.card-title');
+                    if (cardTitle) {
+                        const item = document.createElement('li');
+                        item.className = 'toc-item';
+                        
+                        const link = document.createElement('a');
+                        link.className = 'toc-link';
+                        link.textContent = cardTitle.textContent;
+                        link.href = `#${cardTitle.id}`;
+                        link.style.paddingLeft = '15px';
+                        
+                        item.appendChild(link);
+                        tocList.appendChild(item);
+                    }
+                });
+
+                // Если нет заголовков, показываем сообщение
+                if (tocList.children.length === 0) {
+                    const emptyItem = document.createElement('li');
+                    emptyItem.className = 'toc-item';
+                    emptyItem.textContent = 'Нет заголовков';
+                    tocList.appendChild(emptyItem);
+                }
+            }
+            
+            // Обработка кликов по ссылкам оглавления
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('toc-link')) {
+                    e.preventDefault();
+                    
+                    const targetId = e.target.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if (targetElement) {
+                        const offset = 20;
+                        const elementPosition = targetElement.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - offset;
+                        
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: 'smooth'
+                        });
+                        
+                        // Добавляем класс active
+                        document.querySelectorAll('.toc-link').forEach(l => l.classList.remove('active'));
+                        e.target.classList.add('active');
+                    }
+                }
+            });
+            // Прячем оглавление
+            function handleTOCVisibility() {
+  const toc = document.getElementById('tocContainer');
+  if (!toc) return;
+
+  if (window.innerWidth <= 1180) {
+    toc.style.display = 'none';
+  } else {
+    toc.style.display = 'block';
+  }
+}
+
+handleTOCVisibility();
+window.addEventListener('resize', handleTOCVisibility);
+            // Кнопка "Наверх"
+            const backToTopBtn = document.getElementById('backToTop');
+            
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 300) {
+                    backToTopBtn.classList.add('show');
+                } else {
+                    backToTopBtn.classList.remove('show');
+                }
+            });
+            
+            backToTopBtn.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+            
+            // Инициализация
+            restoreAppState();
+            updateTOC();
+        });
+    </script>
+</body>
