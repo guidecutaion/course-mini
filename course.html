@@ -743,6 +743,44 @@
             color: var(--primary-color);
         }
 
+          .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            margin: 15px 0;
+            background: #f5f7fa;
+            border-radius: var(--border-radius);
+        }
+        
+        .video-container p {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        
+        /* Стили для тестов */
+        .quiz-container {
+            margin-top: 20px;
+        }
+        
+        /* Временные стили для заглушек изображений */
+        .placeholder-img {
+            width: 100%;
+            height: 200px;
+            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-weight: bold;
+            margin: 15px 0;
+            border-radius: var(--border-radius);
+        }
+
         /* Адаптивность */
         @media (max-width: 1200px) {
             .main-content {
@@ -1156,18 +1194,18 @@
     <main class="main-content">
         <!-- Введение -->
         <section class="content-section active" id="intro">
-            <h1 class="section-title">Введение</h1>
+            <h1 class="section-title" id="intro-title">Введение</h1>
             
-            <div class="card">
-                <h2 class="card-title">О чем курс</h2>
+            <div class="card" id="intro-about">
+                <h2 class="card-title" id="intro-about-title">О чем курс</h2>
                 <p>Этот курс предназначен для администраторов колледжей, работающих с ФГИС "Моя школа" в системе среднего профессионального образования.</p>
-                <img src="placeholder-intro.jpg" alt="Введение в курс" style="max-width: 100%;">
+                <div class="placeholder-img">[Изображение: Введение в курс]</div>
             </div>
             
-            <div class="card">
-                <h2 class="card-title">Как работать с курсом</h2>
+            <div class="card" id="intro-howto">
+                <h2 class="card-title" id="intro-howto-title">Как работать с курсом</h2>
                 <p>Курс состоит из 11 модулей, каждый из которых содержит теоретические материалы, практические задания и тесты для самопроверки.</p>
-                <img src="placeholder-structure.jpg" alt="Структура курса" style="max-width: 100%;">
+                <div class="placeholder-img">[Изображение: Структура курса]</div>
             </div>
 
             <div class="section-navigation">
@@ -1182,23 +1220,23 @@
         
         <!-- ФГИС «Моя школа» для СПО -->
         <section class="content-section" id="school">
-            <h1 class="section-title">ФГИС «Моя школа» для СПО</h1>
+            <h1 class="section-title" id="school-title">ФГИС «Моя школа» для СПО</h1>
             
-            <div class="card">
-                <h2 class="card-title">Обзор сервисов для СПО</h2>
+            <div class="card" id="school-services">
+                <h2 class="card-title" id="school-services-title">Обзор сервисов для СПО</h2>
                 <p>Подробное описание функционала системы для учреждений СПО.</p>
-                <img src="placeholder-services.jpg" alt="Сервисы для СПО" style="max-width: 100%;">
+                <div class="placeholder-img">[Изображение: Сервисы для СПО]</div>
             </div>
             
-            <div class="card">
-                <h2 class="card-title">Нормативно-правовая база</h2>
+            <div class="card" id="school-legal">
+                <h2 class="card-title" id="school-legal-title">Нормативно-правовая база</h2>
                 <p>Основные нормативные документы, регулирующие работу системы.</p>
             </div>
             
-            <div class="card">
-                <h2 class="card-title">Авторизация в системе</h2>
+            <div class="card" id="school-auth">
+                <h2 class="card-title" id="school-auth-title">Авторизация в системе</h2>
                 <p>Пошаговая инструкция по входу в систему для администраторов.</p>
-                <img src="placeholder-auth.jpg" alt="Авторизация" style="max-width: 100%;">
+                <div class="placeholder-img">[Изображение: Авторизация]</div>
             </div>
 
             <div class="section-navigation">
@@ -1213,33 +1251,51 @@
         
         <!-- Алгоритмы работы -->
         <section class="content-section" id="algorithms">
-            <h1 class="section-title">Алгоритмы работы</h1>
+            <h1 class="section-title" id="algorithms-title">Алгоритмы работы</h1>
             
-            <div class="card">
-                <h2 class="card-title">Общий алгоритм работы</h2>
+            <div class="card" id="algorithms-general">
+                <h2 class="card-title" id="algorithms-general-title">Общий алгоритм работы</h2>
                 <p>Основные этапы работы с системой в течение учебного года.</p>
-                <img src="placeholder-algorithm.jpg" alt="Общий алгоритм" style="max-width: 100%;">
+                <div class="placeholder-img">[Изображение: Общий алгоритм]</div>
             </div>
             
-            <div class="card">
-                <h2 class="card-title">Движение контингента и кадров</h2>
+            <div class="card" id="algorithms-students">
+                <h2 class="card-title" id="algorithms-students-title">Движение контингента и кадров</h2>
                 <p>Как работать с данными студентов и преподавателей.</p>
             </div>
             
-            <div class="card">
-                <h2 class="card-title">Алгоритм работы администратора</h2>
+            <div class="card" id="algorithms-admin">
+                <h2 class="card-title" id="algorithms-admin-title">Алгоритм работы администратора</h2>
                 <p>Пошаговые инструкции для администратора колледжа.</p>
             </div>
             
-            <div class="card">
-                <h2 class="card-title">Алгоритм работы преподавателя</h2>
+            <div class="card" id="algorithms-teacher">
+                <h2 class="card-title" id="algorithms-teacher-title">Алгоритм работы преподавателя</h2>
                 <p>Как преподаватели взаимодействуют с системой.</p>
             </div>
             
-            <div class="card quiz-container">
-                <h2 class="card-title">Проверь себя</h2>
-                <p>Тест для проверки понимания алгоритмов работы.</p>
-                <!-- Здесь будет мини-тест -->
+            <div class="card quiz-container" id="algorithms-quiz">
+                <h2 class="card-title" id="algorithms-quiz-title">Проверь себя</h2>
+                <div class="question">
+                    <div class="question-text">1. Какой первый шаг в общем алгоритме работы с системой?</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q1" value="a"> Настройка учебного года
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q1" value="b"> Создание расписания
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q1" value="c"> Заполнение справочников
+                        </label>
+                    </div>
+                </div>
+                <button class="submit-btn" id="submitQuiz1">Проверить ответы</button>
+                <div class="quiz-result" id="quizResult1">
+                    <h3>Результаты теста</h3>
+                    <p id="quizScore1"></p>
+                    <p id="quizFeedback1"></p>
+                </div>
             </div>
 
             <div class="section-navigation">
@@ -1254,31 +1310,48 @@
         
         <!-- Администрирование кабинета колледжа -->
         <section class="content-section" id="admin">
-            <h1 class="section-title">Администрирование кабинета колледжа</h1>
+            <h1 class="section-title" id="admin-title">Администрирование кабинета колледжа</h1>
             
-            <div class="card">
-                <h2 class="card-title">Обзор интерфейса сервиса «Организация обучения СПО»</h2>
+            <div class="card" id="admin-interface">
+                <h2 class="card-title" id="admin-interface-title">Обзор интерфейса сервиса «Организация обучения СПО»</h2>
                 <div class="video-container">
-                    <!-- Здесь будет скринкаст -->
                     <p>[Скринкаст: Обзор интерфейса]</p>
                 </div>
             </div>
             
-            <div class="card">
-                <h2 class="card-title">Алгоритм подготовки кабинета колледжа к работе</h2>
+            <div class="card" id="admin-prepare">
+                <h2 class="card-title" id="admin-prepare-title">Алгоритм подготовки кабинета колледжа к работе</h2>
                 <p>Пошаговая инструкция по настройке системы перед началом учебного года.</p>
-                <img src="placeholder-prepare.jpg" alt="Подготовка кабинета" style="max-width: 100%;">
+                <div class="placeholder-img">[Изображение: Подготовка кабинета]</div>
             </div>
             
-            <div class="card">
-                <h2 class="card-title">Алгоритм работы в течение учебного года</h2>
+            <div class="card" id="admin-workflow">
+                <h2 class="card-title" id="admin-workflow-title">Алгоритм работы в течение учебного года</h2>
                 <p>Регулярные действия администратора в системе.</p>
             </div>
             
-            <div class="card quiz-container">
-                <h2 class="card-title">Проверь себя</h2>
-                <p>Тест по администрированию кабинета колледжа.</p>
-                <!-- Здесь будет мини-тест -->
+            <div class="card quiz-container" id="admin-quiz">
+                <h2 class="card-title" id="admin-quiz-title">Проверь себя</h2>
+                <div class="question">
+                    <div class="question-text">1. Какие элементы интерфейса наиболее важны для администратора?</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q2" value="a"> Раздел "Отчеты"
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q2" value="b"> Раздел "Настройки"
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q2" value="c"> Раздел "Управление контингентом"
+                        </label>
+                    </div>
+                </div>
+                <button class="submit-btn" id="submitQuiz2">Проверить ответы</button>
+                <div class="quiz-result" id="quizResult2">
+                    <h3>Результаты теста</h3>
+                    <p id="quizScore2"></p>
+                    <p id="quizFeedback2"></p>
+                </div>
             </div>
 
             <div class="section-navigation">
@@ -1294,7 +1367,7 @@
         <!-- Остальные параграфы -->
         <!-- Заполнение справочников -->
         <section class="content-section" id="references">
-            <h1 class="section-title">Заполнение справочников</h1>
+            <h1 class="section-title" id="references-title">Заполнение справочников</h1>
             <!-- Контент для этого раздела -->
             <div class="section-navigation">
                 <button class="nav-btn" id="references-prev">
@@ -1308,7 +1381,7 @@
         
         <!-- Создание и назначение учебных планов -->
         <section class="content-section" id="plans">
-            <h1 class="section-title">Создание и назначение учебных планов</h1>
+            <h1 class="section-title" id="plans-title">Создание и назначение учебных планов</h1>
             <!-- Контент для этого раздела -->
             <div class="section-navigation">
                 <button class="nav-btn" id="plans-prev">
@@ -1322,7 +1395,7 @@
         
         <!-- Создание групп и выдача нагрузки -->
         <section class="content-section" id="groups">
-            <h1 class="section-title">Создание групп и выдача нагрузки</h1>
+            <h1 class="section-title" id="groups-title">Создание групп и выдача нагрузки</h1>
             <!-- Контент для этого раздела -->
             <div class="section-navigation">
                 <button class="nav-btn" id="groups-prev">
@@ -1336,7 +1409,7 @@
         
         <!-- Создание расписания -->
         <section class="content-section" id="schedule">
-            <h1 class="section-title">Создание расписания</h1>
+            <h1 class="section-title" id="schedule-title">Создание расписания</h1>
             <!-- Контент для этого раздела -->
             <div class="section-navigation">
                 <button class="nav-btn" id="schedule-prev">
@@ -1350,7 +1423,7 @@
         
         <!-- Промежуточная аттестация -->
         <section class="content-section" id="attestation">
-            <h1 class="section-title">Промежуточная аттестация</h1>
+            <h1 class="section-title" id="attestation-title">Промежуточная аттестация</h1>
             <!-- Контент для этого раздела -->
             <div class="section-navigation">
                 <button class="nav-btn" id="attestation-prev">
@@ -1364,7 +1437,7 @@
         
         <!-- Работа администратора в течение учебного года -->
         <section class="content-section" id="workflow">
-            <h1 class="section-title">Работа администратора в течение учебного года</h1>
+            <h1 class="section-title" id="workflow-title">Работа администратора в течение учебного года</h1>
             <!-- Контент для этого раздела -->
             <div class="section-navigation">
                 <button class="nav-btn" id="workflow-prev">
@@ -1378,22 +1451,40 @@
         
         <!-- Завершение -->
         <section class="content-section" id="final">
-            <h1 class="section-title">Завершение</h1>
+            <h1 class="section-title" id="final-title">Завершение</h1>
             
-            <div class="card quiz-container">
-                <h2 class="card-title">Итоговый тест</h2>
-                <p>Проверьте свои знания по всему курсу.</p>
-                <!-- Здесь будет итоговый тест -->
+            <div class="card quiz-container" id="final-quiz">
+                <h2 class="card-title" id="final-quiz-title">Итоговый тест</h2>
+                <div class="question">
+                    <div class="question-text">1. Какой раздел системы используется для создания учебных планов?</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q3" value="a"> Управление контингентом
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q3" value="b"> Организация обучения
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q3" value="c"> Отчеты
+                        </label>
+                    </div>
+                </div>
+                <button class="submit-btn" id="submitQuiz3">Проверить ответы</button>
+                <div class="quiz-result" id="quizResult3">
+                    <h3>Результаты теста</h3>
+                    <p id="quizScore3"></p>
+                    <p id="quizFeedback3"></p>
+                </div>
             </div>
             
-            <div class="card">
-                <h2 class="card-title">Форма обратной связи</h2>
+            <div class="card" id="final-feedback">
+                <h2 class="card-title" id="final-feedback-title">Форма обратной связи</h2>
                 <p>Поделитесь своим мнением о курсе.</p>
                 <a href="#" class="btn">Перейти к форме</a>
             </div>
             
-            <div class="card">
-                <h2 class="card-title">Справочные материалы</h2>
+            <div class="card" id="final-resources">
+                <h2 class="card-title" id="final-resources-title">Справочные материалы</h2>
                 <p>Полезные ссылки и документы для дальнейшей работы.</p>
                 <ul>
                     <li><a href="#">Официальная документация</a></li>
@@ -1401,8 +1492,8 @@
                 </ul>
             </div>
             
-            <div class="card">
-                <h2 class="card-title">Заключение</h2>
+            <div class="card" id="final-conclusion">
+                <h2 class="card-title" id="final-conclusion-title">Заключение</h2>
                 <p>Благодарим за прохождение курса!</p>
             </div>
 
@@ -1480,6 +1571,7 @@
         <i class="fas fa-arrow-up"></i>
     </div>
 
+    <!-- JavaScript с исправлениями -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Проверяем, новый ли это сеанс (если да - очищаем предыдущее состояние)
@@ -1491,7 +1583,7 @@
             // Переключение вкладок
             const tabButtons = document.querySelectorAll('.tab-button');
             const contentSections = document.querySelectorAll('.content-section');
-            const tabs = ['intro', 'basics', 'advanced', 'practice', 'quiz', 'resources'];
+            const tabs = ['intro', 'school', 'algorithms', 'admin', 'references', 'plans', 'groups', 'schedule', 'attestation', 'workflow', 'final'];
             const mobileNavButtons = document.querySelectorAll('.mobile-nav-btn');
             
             // Функция для сохранения состояния
@@ -1511,7 +1603,129 @@
                 localStorage.setItem('appState', JSON.stringify(state));
             }
 
-            // Функция для восстановления состояния
+            // Функция для переключения вкладок
+            function switchTab(tabId) {
+                // Удаляем активный класс у всех кнопок и секций
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                contentSections.forEach(section => {
+                    section.classList.remove('active');
+                    section.style.display = 'none';
+                });
+                mobileNavButtons.forEach(btn => btn.classList.remove('active'));
+                
+                // Добавляем активный класс к выбранной кнопке
+                document.querySelector(`.tab-button[data-tab="${tabId}"]`)?.classList.add('active');
+                
+                // Показываем соответствующую секцию
+                const newSection = document.getElementById(tabId);
+                if (newSection) {
+                    newSection.classList.add('active');
+                    newSection.style.display = 'block';
+                }
+                
+                // Активируем соответствующую кнопку мобильной навигации
+                document.querySelector(`.mobile-nav-btn[data-tab="${tabId}"]`)?.classList.add('active');
+                
+                // Обновляем оглавление
+                updateTOC();
+                
+                // Сбрасываем скролл
+                window.scrollTo(0, 0);
+                
+                // Закрываем меню на мобильных
+                if (window.innerWidth <= 992) {
+                    sidebar.classList.remove('open');
+                    overlay.classList.remove('active');
+                }
+                
+                // Сохраняем состояние
+                saveAppState();
+            }
+            
+            // Обработчики для кнопок вкладок
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabId = button.getAttribute('data-tab');
+                    switchTab(tabId);
+                    
+                    // Помечаем вкладку как пройденную
+                    button.classList.add('completed');
+                    
+                    // Помечаем соответствующую кнопку мобильной навигации как пройденную
+                    document.querySelector(`.mobile-nav-btn[data-tab="${tabId}"]`)?.classList.add('completed');
+                });
+            });
+            
+            // Обработчики для мобильной навигации
+            mobileNavButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const tabId = button.getAttribute('data-tab');
+                    switchTab(tabId);
+                    
+                    document.querySelector(`.tab-button[data-tab="${tabId}"]`)?.classList.add('completed');
+                    button.classList.add('completed');
+                });
+            });
+            
+            // Навигационные кнопки "Далее" и "Назад"
+            tabs.forEach((tab, index) => {
+    const prevBtn = document.getElementById(`${tab}-prev`);
+    const nextBtn = document.getElementById(`${tab}-next`);
+    
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            if (index > 0) {
+                // Помечаем текущую вкладку как пройденную перед переходом
+                document.querySelector(`.tab-button[data-tab="${tab}"]`)?.classList.add('completed');
+                document.querySelector(`.mobile-nav-btn[data-tab="${tab}"]`)?.classList.add('completed');
+                switchTab(tabs[index - 1]);
+            }
+        });
+    }
+    
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            if (index < tabs.length - 1) {
+                // Помечаем текущую вкладку как пройденную перед переходом
+                document.querySelector(`.tab-button[data-tab="${tab}"]`)?.classList.add('completed');
+                document.querySelector(`.mobile-nav-btn[data-tab="${tab}"]`)?.classList.add('completed');
+                switchTab(tabs[index + 1]);
+            }
+        });
+    }
+});
+            
+            // Кнопка сворачивания/разворачивания бокового меню
+            const toggleSidebarBtn = document.getElementById('toggleSidebar');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            const menuToggle = document.getElementById('menuToggle');
+            
+            toggleSidebarBtn.addEventListener('click', function() {
+                sidebar.classList.toggle('collapsed');
+                localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+            });
+            
+            // Мобильное меню
+            menuToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('open');
+                overlay.classList.toggle('active');
+            });
+            
+            // Закрытие меню при клике на оверлей
+            overlay.addEventListener('click', function() {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('active');
+            });
+            
+            // Проверяем сохраненное состояние при загрузке
+            const savedState = localStorage.getItem('sidebarCollapsed');
+            if (savedState === 'true') {
+                sidebar.classList.add('collapsed');
+            }
+            
+            // Восстанавливаем состояние приложения
             function restoreAppState() {
                 const savedState = localStorage.getItem('appState');
                 if (savedState) {
@@ -1529,318 +1743,8 @@
                     if (tab && document.querySelector(`.tab-button[data-tab="${tab}"]`)) {
                         switchTab(tab);
                     }
-                    
-                    setTimeout(() => {
-                        if (scroll) {
-                            window.scrollTo(0, scroll);
-                        }
-                    }, 100);
                 }
             }
-
-            // Функция для переключения вкладок
-            function switchTab(tabId) {
-    // 1. Временно блокируем скролл
-    document.body.style.overflow = 'hidden';
-    
-    // 2. Удаляем активный класс у всех кнопок и секций
-    tabButtons.forEach(btn => btn.classList.remove('active'));
-    contentSections.forEach(section => {
-        section.classList.remove('active');
-        section.style.display = 'none'; // Добавляем для надежности
-    });
-    mobileNavButtons.forEach(btn => btn.classList.remove('active'));
-    
-    // 3. Добавляем активный класс к выбранной кнопке
-    document.querySelector(`.tab-button[data-tab="${tabId}"]`)?.classList.add('active');
-    
-    // 4. Показываем соответствующую секцию
-    const newSection = document.getElementById(tabId);
-    newSection.classList.add('active');
-    newSection.style.display = 'block'; // Добавляем для надежности
-    
-    // 5. Активируем соответствующую кнопку мобильной навигации
-    document.querySelector(`.mobile-nav-btn[data-tab="${tabId}"]`)?.classList.add('active');
-    
-    // 6. Обновляем оглавление
-    updateTOC();
-    
-    // 7. Жесткий сброс скролла (работает на всех устройствах)
-    window.scrollTo(0, 0);
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
-    newSection.scrollTop = 0;
-    
-    // 8. Восстанавливаем скролл после небольшой задержки
-    setTimeout(() => {
-        document.body.style.overflow = '';
-        newSection.style.display = ''; // Восстанавливаем исходное значение
-    }, 50);
-    
-    // 9. Закрываем меню на мобильных
-    if (window.innerWidth <= 992) {
-        sidebar.classList.remove('open');
-        overlay.classList.remove('active');
-    }
-    
-    // 10. Сохраняем состояние
-    saveAppState();
-}
-
-// Проверяем iOS и применяем специальный хак
-if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
-    document.addEventListener('touchmove', function(e) {
-        if (document.body.style.overflow === 'hidden') {
-            e.preventDefault();
-        }
-    }, { passive: false });
-}
-            
-            // Обработчики для кнопок вкладок
-            tabButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const tabId = button.getAttribute('data-tab');
-                    switchTab(tabId);
-                    
-                    // Помечаем вкладку как пройденную
-                    button.classList.add('completed');
-                    
-                    // Помечаем соответствующую кнопку мобильной навигации как пройденную
-                    document.querySelector(`.mobile-nav-btn[data-tab="${tabId}"]`)?.classList.add('completed');
-                });
-            });
-            
-            // Обработчики для мобильной навигации (исправляем проблему с #)
-            mobileNavButtons.forEach(button => {
-                button.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const tabId = button.getAttribute('data-tab');
-                    switchTab(tabId);
-                    
-                    document.querySelector(`.tab-button[data-tab="${tabId}"]`)?.classList.add('completed');
-                    button.classList.add('completed');
-                    
-                    // Удаляем хэш из URL
-                    history.replaceState(null, null, ' ');
-                });
-            });
-            
-            // Навигационные кнопки "Далее" и "Назад"
-            tabs.forEach((tab, index) => {
-                const prevBtn = document.getElementById(`${tab}-prev`);
-                const nextBtn = document.getElementById(`${tab}-next`);
-                
-                if (prevBtn) {
-                    prevBtn.addEventListener('click', () => {
-                        if (index > 0) {
-                            switchTab(tabs[index - 1]);
-                        }
-                    });
-                }
-                
-                if (nextBtn) {
-                    nextBtn.addEventListener('click', () => {
-                        if (index < tabs.length - 1) {
-                            switchTab(tabs[index + 1]);
-                        }
-                    });
-                }
-            });
-            
-            // Кнопка сворачивания/разворачивания бокового меню
-            const toggleSidebarBtn = document.getElementById('toggleSidebar');
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('overlay');
-            
-            toggleSidebarBtn.addEventListener('click', function() {
-                sidebar.classList.toggle('collapsed');
-                
-                // Сохраняем состояние в localStorage
-                const isCollapsed = sidebar.classList.contains('collapsed');
-                localStorage.setItem('sidebarCollapsed', isCollapsed);
-            });
-            
-            // Проверяем сохраненное состояние при загрузке
-            const savedState = localStorage.getItem('sidebarCollapsed');
-            if (savedState === 'true') {
-                sidebar.classList.add('collapsed');
-            }
-            
-            // Мобильное меню
-            const menuToggle = document.getElementById('menuToggle');
-            
-            menuToggle.addEventListener('click', function() {
-                sidebar.classList.toggle('open');
-                overlay.classList.toggle('active');
-            });
-            
-            // Закрытие меню при клике на оверлей
-            overlay.addEventListener('click', function() {
-                sidebar.classList.remove('open');
-                overlay.classList.remove('active');
-            });
-            
-            // Закрытие меню при клике вне его на мобильных
-            document.addEventListener('click', function(e) {
-                if (window.innerWidth <= 992 && 
-                    !sidebar.contains(e.target) && 
-                    !menuToggle.contains(e.target) &&
-                    sidebar.classList.contains('open')) {
-                    sidebar.classList.remove('open');
-                    overlay.classList.remove('active');
-                }
-            });
-            
-            // Автоматическая адаптация под мобильные устройства
-            function handleMobileLayout() {
-                const isMobile = window.innerWidth <= 992;
-                if (isMobile) {
-                    // Устанавливаем 100% высоты для мобильных
-                    document.documentElement.style.height = '100%';
-                    document.body.style.height = '100%';
-                    document.body.style.minHeight = '100vh';
-                    
-                    // Добавляем специальный класс для мобильных
-                    document.body.classList.add('mobile-view');
-                    
-                    // Скрываем кнопку сворачивания в мобильной версии
-                    document.getElementById('toggleSidebar').style.display = 'none';
-                    document.querySelector('.sidebar-header').style.justifyContent = 'center';
-                } else {
-                    document.body.classList.remove('mobile-view');
-                    document.getElementById('toggleSidebar').style.display = 'block';
-                    document.querySelector('.sidebar-header').style.justifyContent = 'space-between';
-                }
-            }
-
-            // Инициализация при загрузке
-            handleMobileLayout();
-            window.addEventListener('resize', handleMobileLayout);
-            
-            // Дополнительная проверка для первой вкладки
-            function checkIntroOverflow() {
-                if (window.innerWidth <= 992) {
-                    const introSection = document.getElementById('intro');
-                    if (introSection) {
-                        const containerWidth = introSection.offsetWidth;
-                        const contentWidth = introSection.scrollWidth;
-                        
-                        if (contentWidth > containerWidth) {
-                            // Принудительно применяем дополнительные стили
-                            introSection.style.overflowX = 'hidden';
-                            introSection.querySelectorAll('*').forEach(el => {
-                                el.style.maxWidth = '100%';
-                                el.style.boxSizing = 'border-box';
-                            });
-                        }
-                    }
-                }
-            }
-            
-            // Проверяем при загрузке и изменении размера
-            window.addEventListener('load', checkIntroOverflow);
-            window.addEventListener('resize', checkIntroOverflow);
-            
-            // Аккордеон
-            const accordionHeaders = document.querySelectorAll('.accordion-header');
-            accordionHeaders.forEach(header => {
-                header.addEventListener('click', () => {
-                    const accordion = header.parentElement;
-                    accordion.classList.toggle('active');
-                    
-                    const icon = header.querySelector('i');
-                    if (accordion.classList.contains('active')) {
-                        icon.classList.remove('fa-chevron-down');
-                        icon.classList.add('fa-chevron-up');
-                    } else {
-                        icon.classList.remove('fa-chevron-up');
-                        icon.classList.add('fa-chevron-down');
-                    }
-                });
-            });
-            
-            // Показать/скрыть решение задачи
-            document.getElementById('showSolution1').addEventListener('click', function() {
-                const solution = document.getElementById('solution1');
-                if (solution.style.display === 'none') {
-                    solution.style.display = 'block';
-                    this.textContent = 'Скрыть решение';
-                } else {
-                    solution.style.display = 'none';
-                    this.textContent = 'Показать решение';
-                }
-            });
-            
-            // Тест для самопроверки
-            const quizForm = document.querySelector('.quiz-container');
-            const submitBtn = document.getElementById('submitQuiz');
-            const quizResult = document.getElementById('quizResult');
-            const quizScore = document.getElementById('quizScore');
-            const quizFeedback = document.getElementById('quizFeedback');
-            const retryBtn = document.getElementById('retryQuiz');
-            
-            const correctAnswers = {
-                q1: 'a',
-                q2: 'b',
-                q3: 'b'
-            };
-            
-            submitBtn.addEventListener('click', function() {
-                let score = 0;
-                const totalQuestions = Object.keys(correctAnswers).length;
-                
-                // Проверяем ответы
-                for (const question in correctAnswers) {
-                    const selectedOption = document.querySelector(`input[name="${question}"]:checked`);
-                    const options = document.querySelectorAll(`input[name="${question}"]`);
-                    
-                    options.forEach(option => {
-                        const optionLabel = option.parentElement;
-                        optionLabel.classList.remove('correct', 'incorrect');
-                        
-                        if (option.value === correctAnswers[question]) {
-                            optionLabel.classList.add('correct');
-                        } else if (option.checked) {
-                            optionLabel.classList.add('incorrect');
-                        }
-                    });
-                    
-                    if (selectedOption && selectedOption.value === correctAnswers[question]) {
-                        score++;
-                    }
-                }
-                
-                // Показываем результаты
-                quizScore.textContent = `Вы ответили правильно на ${score} из ${totalQuestions} вопросов.`;
-                
-                // Добавляем обратную связь
-                const percentage = (score / totalQuestions) * 100;
-                if (percentage >= 80) {
-                    quizFeedback.textContent = 'Отличный результат! Вы хорошо усвоили материал.';
-                } else if (percentage >= 50) {
-                    quizFeedback.textContent = 'Неплохо, но есть над чем поработать. Повторите материал еще раз.';
-                } else {
-                    quizFeedback.textContent = 'Рекомендуем изучить материал еще раз перед продолжением.';
-                }
-                
-                quizResult.classList.add('show');
-                window.scrollTo({
-                    top: quizResult.offsetTop - 20,
-                    behavior: 'smooth'
-                });
-                
-                // Сохраняем состояние
-                saveAppState();
-            });
-            
-            retryBtn.addEventListener('click', function() {
-                // Сбрасываем тест
-                document.querySelectorAll('input[type="radio"]').forEach(input => {
-                    input.checked = false;
-                    input.parentElement.classList.remove('correct', 'incorrect');
-                });
-                quizResult.classList.remove('show');
-            });
             
             // Генерация оглавления
             function updateTOC() {
@@ -1883,14 +1787,6 @@ if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
                         tocList.appendChild(item);
                     }
                 });
-
-                // Если нет заголовков, показываем сообщение
-                if (tocList.children.length === 0) {
-                    const emptyItem = document.createElement('li');
-                    emptyItem.className = 'toc-item';
-                    emptyItem.textContent = 'Нет заголовков';
-                    tocList.appendChild(emptyItem);
-                }
             }
             
             // Обработка кликов по ссылкам оглавления
@@ -1917,20 +1813,7 @@ if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
                     }
                 }
             });
-            // Прячем оглавление
-            function handleTOCVisibility() {
-  const toc = document.getElementById('tocContainer');
-  if (!toc) return;
-
-  if (window.innerWidth <= 1180) {
-    toc.style.display = 'none';
-  } else {
-    toc.style.display = 'block';
-  }
-}
-
-handleTOCVisibility();
-window.addEventListener('resize', handleTOCVisibility);
+            
             // Кнопка "Наверх"
             const backToTopBtn = document.getElementById('backToTop');
             
@@ -1949,9 +1832,72 @@ window.addEventListener('resize', handleTOCVisibility);
                 });
             });
             
+            // Тесты
+            function setupQuiz(quizId, correctAnswers) {
+                const submitBtn = document.getElementById(`submitQuiz${quizId}`);
+                const quizResult = document.getElementById(`quizResult${quizId}`);
+                const quizScore = document.getElementById(`quizScore${quizId}`);
+                const quizFeedback = document.getElementById(`quizFeedback${quizId}`);
+                
+                submitBtn.addEventListener('click', function() {
+                    let score = 0;
+                    const totalQuestions = Object.keys(correctAnswers).length;
+                    
+                    // Проверяем ответы
+                    for (const question in correctAnswers) {
+                        const selectedOption = document.querySelector(`input[name="${question}"]:checked`);
+                        const options = document.querySelectorAll(`input[name="${question}"]`);
+                        
+                        options.forEach(option => {
+                            const optionLabel = option.parentElement;
+                            optionLabel.classList.remove('correct', 'incorrect');
+                            
+                            if (option.value === correctAnswers[question]) {
+                                optionLabel.classList.add('correct');
+                            } else if (option.checked) {
+                                optionLabel.classList.add('incorrect');
+                            }
+                        });
+                        
+                        if (selectedOption && selectedOption.value === correctAnswers[question]) {
+                            score++;
+                        }
+                    }
+                    
+                    // Показываем результаты
+                    quizScore.textContent = `Вы ответили правильно на ${score} из ${totalQuestions} вопросов.`;
+                    
+                    // Добавляем обратную связь
+                    const percentage = (score / totalQuestions) * 100;
+                    if (percentage >= 80) {
+                        quizFeedback.textContent = 'Отличный результат! Вы хорошо усвоили материал.';
+                    } else if (percentage >= 50) {
+                        quizFeedback.textContent = 'Неплохо, но есть над чем поработать. Повторите материал еще раз.';
+                    } else {
+                        quizFeedback.textContent = 'Рекомендуем изучить материал еще раз перед продолжением.';
+                    }
+                    
+                    quizResult.classList.add('show');
+                });
+            }
+            
+            // Настройка тестов
+            setupQuiz(1, { q1: 'a' });
+            setupQuiz(2, { q2: 'b' });
+            setupQuiz(3, { q3: 'b' });
+            
             // Инициализация
             restoreAppState();
             updateTOC();
+            
+            // Адаптация под мобильные устройства
+            function handleMobileLayout() {
+                const isMobile = window.innerWidth <= 992;
+                document.body.classList.toggle('mobile-view', isMobile);
+            }
+            
+            window.addEventListener('resize', handleMobileLayout);
+            handleMobileLayout();
         });
     </script>
 </body>
